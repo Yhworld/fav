@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Heart, Search } from 'lucide-react';
 import SearchBar from './components/SearchBar';
 import ProductList from './components/ProductList';
@@ -7,7 +7,7 @@ import { searchProducts } from './api/api';
 
 function App() {
   const [products, setProducts] = useState([]);
-  // const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('search');
@@ -32,6 +32,21 @@ function App() {
     }
   };
   
+  // Toggle favorites
+  const handleToggleFavorite = useMemo(() => {
+    return (product) => {
+      setFavorites(prevFavorites => {
+        const exists = prevFavorites.some(item => item.id === product.id);
+        
+        if (exists) {
+          return prevFavorites.filter(item => item.id !== product.id);
+        } else {
+          return [...prevFavorites, product];
+        }
+      });
+    };
+  }, []);
+  
   return (
     <div className="max-w-4xl mx-auto mt-8 p-6 rounded-lg">
       <header className="text-center pb-8">
@@ -51,8 +66,8 @@ function App() {
             className={`flex items-center gap-2 px-4 py-2 rounded-md ${activeTab === 'favorites' ? 'bg-black text-white font-medium' : ''}`}
             onClick={() => setActiveTab('favorites')}
           >
-            <Heart size={18} />
-            Favorites 
+            <Heart size={18} className={favorites.length > 0 ? 'fill-red-500 text-red-500' : ''} />
+            Favorites {favorites.length > 0 && `(${favorites.length})`}
           </button>
         </div>
       </div>
@@ -69,7 +84,9 @@ function App() {
             <div className="text-center py-8 text-red-500">{error}</div>
           ) : (
             <ProductList 
-              products={products}  
+              products={products} 
+              favorites={favorites} 
+              onToggleFavorite={handleToggleFavorite} 
             />
           )}
         </>
@@ -77,7 +94,10 @@ function App() {
       
       {activeTab === 'favorites' && (
         <div className="mt-4">
-          <FavoritesList />
+          <FavoritesList 
+            favorites={favorites} 
+            onToggleFavorite={handleToggleFavorite} 
+          />
         </div>
       )}
     </div>
