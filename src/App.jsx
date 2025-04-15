@@ -32,20 +32,17 @@ function App() {
     }
   };
   
-  // Toggle favorites
-  const handleToggleFavorite = useMemo(() => {
-    return (product) => {
-      setFavorites(prevFavorites => {
-        const exists = prevFavorites.some(item => item.id === product.id);
+  const handleToggleFavorite = (product) => {
+      setFavorites(currentFavorites => {
+        const exists = currentFavorites.some(item => item.id === product.id);
         
         if (exists) {
-          return prevFavorites.filter(item => item.id !== product.id);
+          return currentFavorites.filter(item => item.id !== product.id);
         } else {
-          return [...prevFavorites, product];
+          return [...currentFavorites, product];
         }
       });
-    };
-  }, []);
+  };
   
   return (
     <div className="max-w-4xl mx-auto mt-8 p-6 rounded-lg">

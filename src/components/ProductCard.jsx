@@ -3,11 +3,11 @@ import { Heart } from 'lucide-react';
 function ProductCard({ product, isFavorite, onToggleFavorite }) {
   return (
     <div className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      {/* <img 
+      <img 
         src={product.image} 
         alt={product.name} 
-        className="w-full h-40 object-cover"
-      /> */}
+        className="w-full h-40 object-contain"
+      />
       <div className="p-4">
         <div className="flex justify-between items-start">
           <h3 className="font-medium text-lg">{product.name}</h3>

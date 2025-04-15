@@ -5,7 +5,7 @@ const API_URL = 'https://foregoing-typhoon-scissor.glitch.me/db.json';
 export const searchProducts = async (query) => {
   try {
     const response = await axios.get(API_URL);
-    const meals = response.data.Meals || [];
+    const meals = response.data.Meals;
     
     if (!query) return meals;
     
